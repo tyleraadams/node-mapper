@@ -7,6 +7,12 @@ function initialize() {
   var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
 }
 
-document.addEventListener("DOMContentLoaded", function(event) { 
+document.addEventListener("DOMContentLoaded", function(event) {
   google.maps.event.addDomListener(window, 'load', initialize);
+  // var socket = io.connect('http://localhost');
+  // socket.on('tweet', function (data) {
+    // console.log(data);
+    // socket.emit('my other event', { my: 'data' });
+  // });
 });
+

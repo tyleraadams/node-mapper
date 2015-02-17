@@ -20,7 +20,7 @@ app.post('/', function(req, res) {
   console.log('Search term: ' + req.body.searchTerm);
   var searchTerm = req.body.searchTerm;
 
-  twit.stream('statuses/filter',{  'locations':'-180,-90,180,90'}, function(stream){
+  twit.stream('statuses/filter',{ track: searchTerm,  'locations':'-180,-90,180,90'}, function(stream){
   streamHandler(stream,io);
 });
 
