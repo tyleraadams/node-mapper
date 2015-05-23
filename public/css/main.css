@@ -95,19 +95,67 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
-
 body {
-    background:gold;
+    font-family: 'Roboto', sans-serif;
+}
+form, h1, button{
+    position: absolute;
+    z-index: 1;
 }
 
 
-
+h1 {
+  position: absolute;
+  z-index: 1;
+  color: #000000;
+  left: 10%;
+  top: -6px;
+  font-weight: 700;
+  margin:0;
+}
 
 #googleMap {
     width:100%;
-    height:380px;
+    height:100vh;
+    position:fixed;
 }
 
+input {
+    outline: none;
+    font-size:22px;
+}
+
+input[type="text"] {
+  width: 66%;
+  height: 30px;
+  background-color: #C8D5DC;
+  border: 0;
+  float: left;
+
+}
+
+input[type="submit"] {
+  height: 33px;
+  border: 0;
+  background-color: teal;
+  color: white;
+  margin: 0;
+
+  /* display: inline-block; */
+  top: -1px;
+  position: relative;
+  font-weight:100;
+}
+
+input[type="submit"]:hover {
+    background: black;
+}
+
+form {
+    width: 33%;
+    left:50%;
+    transform: translateX(-50%);
+}
 
 
 

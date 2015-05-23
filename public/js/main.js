@@ -1,7 +1,7 @@
 function initialize() {
   var mapProp = {
     center:new google.maps.LatLng(51.508742,-0.120850),
-    zoom:5,
+    zoom:2,
     mapTypeId:google.maps.MapTypeId.ROADMAP
   };
   map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
@@ -29,7 +29,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
   var btnStop = document.getElementById('btn-stop');
   btnStop.addEventListener('click', function(event){
     console.log('!! ', event.target);
-    socket.disconnect();
+    // this shiz isn't working
+    socket.emit('pause', null, function(data) {
+    console.log(data);
+    });
   });
 });
 
