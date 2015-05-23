@@ -4,7 +4,7 @@ var bodyParser =  require("body-parser");
 var twitter = require('ntwitter');
 var streamHandler = require('./lib/twitter-handler');
 var config = require('./config');
-var io = require('socket.io').listen(server);
+//var io = require('socket.io').listen(server);
 var http = require('http');
 var port = process.env.PORT || 8080;
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -20,12 +20,14 @@ app.post('/', function(req, res) {
   console.log('Search term: ' + req.body.searchTerm);
   var searchTerm = req.body.searchTerm;
 
-  twit.stream('statuses/filter',{ track: searchTerm,  'locations':'-180,-90,180,90'}, function(stream){
-  streamHandler(stream,io);
-});
+  twit.stream('statuses/filter', { track: searchTerm,  'locations':'-180,-90,180,90'}, function(stream){
+    streamHandler(stream,io);
 
+  });
 });
 
 var server = http.createServer(app).listen(port, function() {
   console.log('Express server listening on port ' + port);
 });
+
+var io = require('socket.io')(server);
