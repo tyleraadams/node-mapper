@@ -11,23 +11,43 @@ document.addEventListener("DOMContentLoaded", function(event) {
   google.maps.event.addDomListener(window, 'load', initialize);
   var socket = io.connect('http://localhost:8080');
   socket.on('tweet', function (tweet) {
-    console.log(tweet.location);
+
     if(tweet.location) {
       var lat = tweet.location[0];
       var lon = tweet.location[1];
       var latLon = new google.maps.LatLng(lat,lon);
       var marker = new google.maps.Marker({
         position: latLon,
-        title: 'Hello World!',
+        title: tweet.body,
         map: map
       });
 
     }
     //socket.emit('my other event', { my: 'data' });
   });
+    $(function(){
+        $('input[type="submit"]').on('click', function(e){
+          e.preventDefault();
+           var searchValue = $('form').find('input').val();
+           socket.emit('search', {search: searchValue}, function(data) {
+            console.log(data);
+          });
+         // if(e.keyCode === 13) {
 
+          //  console.log(parameters);
+
+          //    $.get( '/search',parameters, function(data) {
+          //      $('#results').html(data);
+          //    }).fail(function (error) {
+
+          //      console.error(error);
+          // });
+          // };
+       });
+      });
   var btnStop = document.getElementById('btn-stop');
   btnStop.addEventListener('click', function(event){
+    event.preventDefault();
     console.log('!! ', event.target);
     // this shiz isn't working
     socket.emit('pause', null, function(data) {

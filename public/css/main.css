@@ -98,7 +98,8 @@ textarea {
 body {
     font-family: 'Roboto', sans-serif;
 }
-form, h1, button{
+
+form, h1 {
     position: absolute;
     z-index: 1;
 }
@@ -120,21 +121,21 @@ h1 {
     position:fixed;
 }
 
-input {
+input,button {
     outline: none;
     font-size:22px;
 }
 
 input[type="text"] {
   width: 66%;
-  height: 30px;
+  height: 31px;
   background-color: #C8D5DC;
   border: 0;
   float: left;
 
 }
 
-input[type="submit"] {
+input[type="submit"], button {
   height: 33px;
   border: 0;
   background-color: teal;
@@ -147,6 +148,12 @@ input[type="submit"] {
   font-weight:100;
 }
 
+button {
+  background: tomato;
+  top: 0;
+  left: -4px;
+}
+
 input[type="submit"]:hover {
     background: black;
 }
@@ -156,12 +163,6 @@ form {
     left:50%;
     transform: translateX(-50%);
 }
-
-
-
-
-
-
 
 /* ==========================================================================
    Helper classes

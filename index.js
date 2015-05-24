@@ -14,20 +14,60 @@ var twit = new twitter(config.twitter);
 
 app.get('/', function(req, res) {
   res.render('index');
+
 });
 
-app.post('/', function(req, res) {
-  console.log('Search term: ' + req.body.searchTerm);
-  var searchTerm = req.body.searchTerm;
-
-  twit.stream('statuses/filter', { track: searchTerm,  'locations':'-180,-90,180,90'}, function(stream){
-    streamHandler(stream,io);
-
-  });
-});
-
+//app.get('/search', function(req, res) {
 var server = http.createServer(app).listen(port, function() {
   console.log('Express server listening on port ' + port);
 });
 
 var io = require('socket.io')(server);
+
+io.on('connection', function(socket){
+	// var searchTerm = req.query.search;
+  //io.on('connection', function(socket){
+	socket.on('search', function(searchTerm){
+ 		console.log('!! ', searchTerm);
+    	twit.stream('statuses/filter', { track: searchTerm.search,  'locations':'-180,-90,180,90'}, function(stream){
+    	// streamHandler(stream,io);
+    		twit.currentTwitStream = stream;
+    		twit.currentTwitStream.on('data', function(data) {
+
+		    // Construct a new tweet object
+
+		    var tweet = {
+		      twid: data['id'],
+		      active: false,
+		      author: data['user']['name'],
+		      avatar: data['user']['profile_image_url'],
+		      body: data['text'],
+		      date: data['created_at'],
+		      screenname: data['user']['screen_name'],
+		    };
+
+		    if (data['geo']) {
+		      tweet['location'] = data['geo']['coordinates'];
+		    }
+
+		    io.emit('tweet', tweet);
+  		});
+
+
+ 	});
+
+    socket.on('pause', function(socket){
+    	twit.currentTwitStream.destroy();
+    });
+  });
+});
+
+// io.on('pause', function(socket){
+
+// });
+
+
+
+
+//});
+
