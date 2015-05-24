@@ -22,6 +22,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
         map: map
       });
 
+    var infowindow = new google.maps.InfoWindow({
+      content: JSON.stringify(tweet)
+    });
+
+    google.maps.event.addListener(marker, 'click', function() {
+      infowindow.open(map,marker);
+    });
+
     }
     //socket.emit('my other event', { my: 'data' });
   });
@@ -32,17 +40,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
            socket.emit('search', {search: searchValue}, function(data) {
             console.log(data);
           });
-         // if(e.keyCode === 13) {
-
-          //  console.log(parameters);
-
-          //    $.get( '/search',parameters, function(data) {
-          //      $('#results').html(data);
-          //    }).fail(function (error) {
-
-          //      console.error(error);
-          // });
-          // };
        });
       });
   var btnStop = document.getElementById('btn-stop');
