@@ -1,30 +1,37 @@
 var express = require('express');
 var app = express();
 var bodyParser =  require("body-parser");
-var twitter = require('ntwitter');
+var twitter = require('twit');
 var streamHandler = require('./lib/twitter-handler');
 var config = require('./config');
 //var io = require('socket.io').listen(server);
 var http = require('http');
 var port = process.env.PORT || 8080;
-app.use(bodyParser.urlencoded({ extended: false }));
+var cache = {};
+
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
 app.use(express.static(__dirname + '/public'));
 
 var twit = new twitter(config.twitter);
 
 app.get('/', function(req, res) {
   res.render('index');
-
 });
 
-//app.get('/search', function(req, res) {
-var server = http.createServer(app).listen(port, function() {
-  console.log('Express server listening on port ' + port);
-});
+app.post('/location', function(req, res) {
+  console.log('req: ', req.body);
+  twit.get('/trends/place', {'id': 1}, function(err, data){
+  	console.log(data);
+  	if (err) return console.error(err);
+  	if ( cache['trending'] === undefined) {
+		cache['trending'] = data[0];
+  	}
 
-var io = require('socket.io')(server);
-
-io.on('connection', function(socket){
+  	res.send(cache['trending']);
+  	io.on('connection', function(socket){
 	// var searchTerm = req.query.search;
   //io.on('connection', function(socket){
 	socket.on('search', function(searchTerm){
@@ -64,6 +71,8 @@ io.on('connection', function(socket){
 
 		    if (tweet['location']) {
 		    	io.emit('tweet', tweet);
+		    } else {
+		    	console.log('no geotag ', tweet);
 		    }
 
 
@@ -72,11 +81,23 @@ io.on('connection', function(socket){
 
  	});
 
-    socket.on('pause', function(socket){
+    socket.on('pause', function(){
     	twit.currentTwitStream.destroy();
     });
+
   });
 });
+
+  });
+});
+
+//app.get('/search', function(req, res) {
+var server = http.createServer(app).listen(port, function() {
+  console.log('Express server listening on port ' + port);
+});
+
+var io = require('socket.io')(server);
+
 
 // io.on('pause', function(socket){
 

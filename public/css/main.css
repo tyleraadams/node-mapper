@@ -98,7 +98,9 @@ textarea {
 body {
     font-family: 'Roboto', sans-serif;
 }
-
+ul, li {
+  list-style-type: none;
+}
 form, h1 {
     position: absolute;
     z-index: 1;
@@ -162,6 +164,15 @@ form {
     width: 33%;
     left:50%;
     transform: translateX(-50%);
+}
+
+aside {
+  position:fixed;
+  background:white;
+  z-index: 100;
+  right:0;
+  top:50%;
+  padding:12px;
 }
 
 /* ==========================================================================

@@ -10,6 +10,28 @@ function initialize() {
 document.addEventListener("DOMContentLoaded", function(event) {
   google.maps.event.addDomListener(window, 'load', initialize);
   var socket = io.connect('http://localhost:8080');
+  $.get("http://ipinfo.io", function(response) {
+    var location = response;
+    $.post('/location', location, function(data) {
+      var trendingData = data;
+      console.log(trendingData.trends);
+      $trending = $('#trending');
+      for (var i=0; i < trendingData.trends.length; i++) {
+        $trending.append('<li><a href=\''+ trendingData.trends[i].url + '\'>' +  trendingData.trends[i].name + '</li>');
+        if(i === trendingData.trends.length - 1) {
+          $('#trending li a').on('click', function(e){
+          console.log('!!! ', $(e.target).text());
+          e.preventDefault();
+          $('form').find('input[type=text]').val($(e.target).text())
+            var searchValue = $('form').find('input').val();
+            socket.emit('search', {search: searchValue}, function(data) {
+            console.log(data);
+          });
+        });
+        }
+      }
+    });
+  }, "jsonp");
   socket.on('tweet', function (tweet) {
 
     if(tweet.location) {
@@ -33,23 +55,30 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
     //socket.emit('my other event', { my: 'data' });
   });
-    $(function(){
-        $('input[type="submit"]').on('click', function(e){
-          e.preventDefault();
-           var searchValue = $('form').find('input').val();
-           socket.emit('search', {search: searchValue}, function(data) {
-            console.log(data);
-          });
-       });
+
+
+    $('input[type="submit"]').on('click', function(e){
+      e.preventDefault();
+       var searchValue = $('form').find('input').val();
+       socket.emit('search', {search: searchValue}, function(data) {
+        console.log(data);
       });
+   });
+
   var btnStop = document.getElementById('btn-stop');
   btnStop.addEventListener('click', function(event){
     event.preventDefault();
     console.log('!! ', event.target);
     // this shiz isn't working
     socket.emit('pause', null, function(data) {
-    console.log(data);
+      console.log(data);
     });
+
   });
+
+
+
 });
+
+
 

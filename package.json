@@ -9,10 +9,12 @@
   "author": "Tyler Adams",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.11.2",
     "body-parser": "^1.12.0",
+    "express": "^4.11.2",
     "ntwitter": "^0.5.0",
     "socket.io": "^1.3.4",
-    "socket.io-client": "^1.3.4"
+    "socket.io-client": "^1.3.4",
+    "twit": "^1.1.20",
+    "twitter": "^1.2.5"
   }
 }
